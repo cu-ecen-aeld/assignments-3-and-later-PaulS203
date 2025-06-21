@@ -2,7 +2,8 @@
 # Tester script for assignment 1 and assignment 2
 # Author: Siddhant Jajoo
 
-make clean all
+# as per assignment request, remove make-step
+# make clean all
 
 set -e
 set -u
