@@ -35,7 +35,8 @@ echo "Writing ${NUMFILES} files containing string ${WRITESTR} to ${WRITEDIR}"
 rm -rf "${WRITEDIR}"
 
 # create $WRITEDIR if not assignment1
-assignment=`cat ../conf/assignment.txt`
+# assignment=con`cat ../conf/assignment.txt`
+assignment='assignments-3-and-later'
 
 if [ $assignment != 'assignment1' ]
 then
