@@ -3,9 +3,11 @@
 # Author: Siddhant Jajoo.
 
 
-# Pauls203: added to speed up: determine whether the kernal image exists already and copy is later
-# down the script to save hours of compilation time causing GitHub Actions to timeout.
-IMAGE_PATH="$(realpath "$(dirname "$0")")/Image"
+# PaulS20§: determine the real path of this script, needed for adjustment operations later
+SCRIPT_PATH="$(realpath "$(dirname "$0")")"
+
+# PaulS203: change the timeout of qemu to ensure we can complete the test run (60s is not enough)
+sed -i 's/qemu_timeout=60/qemu_timeout=500/' "${SCRIPT_PATH}/../assignment-autotest/test/assignment3/assignment-test.sh"
 
 
 ### original script starts here
@@ -39,10 +41,11 @@ if [ ! -d "${OUTDIR}/linux-stable" ]; then
 fi
 
 
-# PaulS203: copy the kernal image if it exists to save compile time.
-if [ -f "$IMAGE_PATH" ]; then
+# PaulS203: added to speed up: determine whether the kernal image exists already and copy it to 
+# save hours of compilation time causing GitHub Actions to timeout.
+if [ -f "${SCRIPT_PATH}/Image" ]; then
 	echo "file exists, copy operation started"
-    cp "$IMAGE_PATH" "${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image"
+    cp "${SCRIPT_PATH}/Image" "${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image"
 else 
 	echo "file does NOT exist, will build kernel"
 fi
