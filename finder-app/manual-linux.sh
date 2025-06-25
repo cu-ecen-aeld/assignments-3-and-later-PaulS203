@@ -2,6 +2,14 @@
 # Script outline to install and build kernel.
 # Author: Siddhant Jajoo.
 
+
+# Pauls203: added to speed up: determine whether the kernal image exists already and copy is later
+# down the script to save hours of compilation time causing GitHub Actions to timeout.
+IMAGE_PATH="$(realpath "$(dirname "$0")")/Image"
+
+
+### original script starts here
+
 set -e
 set -u
 
@@ -29,6 +37,16 @@ if [ ! -d "${OUTDIR}/linux-stable" ]; then
 	echo "CLONING GIT LINUX STABLE VERSION ${KERNEL_VERSION} IN ${OUTDIR}"
 	git clone ${KERNEL_REPO} --depth 1 --single-branch --branch ${KERNEL_VERSION}
 fi
+
+
+# PaulS203: copy the kernal image if it exists to save compile time.
+if [ -f "$IMAGE_PATH" ]; then
+	echo "file exists, copy operation started"
+    cp "$IMAGE_PATH" "${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image"
+else 
+	echo "file does NOT exist, will build kernel"
+fi
+
 if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     cd linux-stable
     echo "Checking out version ${KERNEL_VERSION}"
